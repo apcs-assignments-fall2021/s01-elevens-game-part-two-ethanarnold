@@ -24,7 +24,11 @@ public class ElevensBoard extends Board {
     // returns true if **any** two of the given cards adds up to exactly 11
     // and false otherwise
     public boolean containsPairSum11(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
+        for (int x : cardIndexes) {
+            for (int y: cardIndexes) {
+                if (cardAt(x).getPointValue() + cardAt(y).getPointValue() == 11) return true;
+            }
+        }
         return false;
     }
 
@@ -32,8 +36,15 @@ public class ElevensBoard extends Board {
     // returns true if there is at least 1 Jack, at least 1 Queen, and at least 1 King
     // amongst the selected cards, and false otherwise
     public boolean containsJQK(ArrayList<Integer> cardIndexes) {
-        // YOUR CODE HERE
-        return false;
+        Boolean jack = false;
+        Boolean queen = false;
+        Boolean king = false;
+        for (int x : cardIndexes) {
+            if(cardAt(x).getRank().equals("jack")) jack = true;
+            if(cardAt(x).getRank().equals("queen")) queen = true;
+            if(cardAt(x).getRank().equals("king")) king = true;
+        }
+        return (jack && queen && king);
     }
 
     // Determine if there are any legal plays left on the board.
@@ -42,12 +53,8 @@ public class ElevensBoard extends Board {
     // queen, and a king in some order.
     @Override
     public boolean anotherPlayIsPossible() {
-        // allCards is a list of the indexes of all cards on the board
         ArrayList<Integer> allCards = getAllCardIndexes();
-
-        // YOUR CODE HERE
-        // Just 1-2 lines of code needed
-        return false;
+        return containsPairSum11(allCards) || containsJQK(allCards);
     }
 
     // Determines if the selected cards form a valid group for removal. In Elevens,
@@ -55,7 +62,7 @@ public class ElevensBoard extends Board {
     // (2) a group of three cards consisting of a jack, a queen, and a king in some order
     @Override
     public boolean isLegal(ArrayList<Integer> selectedCards) {
-        // YOUR CODE HERE
-        return false;
+        return (containsPairSum11(selectedCards) && selectedCards.size() == 2)
+                || (containsJQK(selectedCards) && selectedCards.size() == 3);
     }
 }
